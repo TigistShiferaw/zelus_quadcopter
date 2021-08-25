@@ -1,4 +1,4 @@
-#include "zqcopter/hubcomm.h"
+#include "zqcopter/rcp_to_hub.h"
 
 int init(ros::NodeHandle *nodehandle){
     nh = *nodehandle;
@@ -6,10 +6,7 @@ int init(ros::NodeHandle *nodehandle){
 
     // Publishers
     apose_pub = nh.advertise<geometry_msgs::Pose>("apose", 1);
-    dpose_pub = nh.advertise<geometry_msgs::Pose>("dpose", 1);
     atwist_pub = nh.advertise<geometry_msgs::Twist>("atwist", 1);
-    dtwist_pub = nh.advertise<geometry_msgs::Twist>("dtwist", 1);
-
 
     run();
 }

@@ -10,36 +10,10 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
+#include "zqcopter/hub.h"
 
 #include <iostream>
 #include <sstream>
-
-// Structs to temporarily hold the information until they can
-// be converted to ROS messages
-struct Point {
-    double x;
-    double y;
-    double z;
-};
-
-struct Quat {
-    double x;
-    double y;
-    double z;
-    double w;
-};
-
-struct Pose {
-    Point p;
-    Quat q;
-};
-
-struct Twist {
-    int xdot;
-    int ydot;
-    int zdot;
-    // Ignore angular velocities for now
-};
 
 // ROS objects
 ros::NodeHandle nh;
@@ -50,7 +24,6 @@ int cycles;
 
 // Ros publishers
 ros::Publisher apose_pub; // actual pose
-ros::Publisher dpose_pub; // desired pose
 ros::Publisher twist_pub; // actual twist
 
 // Initializes all publishers and subscribers
@@ -60,6 +33,9 @@ int init(ros::NodeHandle *nodehandle);
 // Spins node and handles all recurring update functions (not including callbacks)
 void run();
 
-void publishActualPose(Pose &pose);
-void publishDesiredPose(Pose &pose);
+void publishPose(Pose &pose);
 void publishTwist(Twist &twist);
+void publishAutonState(char state);
+// void publishXdot(int xdot);
+// void publishYdot(int ydot);
+// void publishZdot(int zdot);
