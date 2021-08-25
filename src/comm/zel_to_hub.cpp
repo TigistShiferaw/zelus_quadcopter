@@ -121,27 +121,80 @@ void publishAutonDesiredState(char state){
 }
 
 void getPose(double *poseContainer){
-    boost::shared_ptr<geometry_msgs::Pose const> sharedPose;
-    //geometry_msgs::Pose pose;
-    sharedPose = ros::topic::waitForMessage<geometry_msgs::Pose>("pose_hub");
-    if(sharedPose != NULL){
-        poseContainer[0] = sharedPose->position->z;
-        poseContainer[1] = sharedPose->position->y;
-        poseContainer[2] = sharedPose->position->z;
-        poseContainer[3] = sharedPose->orientation->x;
-        poseContainer[4] = sharedPose->orientation->y;
-        poseContainer[5] = sharedPose->orientation->z;
-        poseContainer[6] = sharedPose->orientation->w;
+    try {
+        boost::shared_ptr<geometry_msgs::Pose const> sharedPose;
+        sharedPose = ros::topic::waitForMessage<geometry_msgs::Pose>("pose_hub");
+        if(sharedPose != NULL){
+            poseContainer[0] = sharedPose->position->z;
+            poseContainer[1] = sharedPose->position->y;
+            poseContainer[2] = sharedPose->position->z;
+            poseContainer[3] = sharedPose->orientation->x;
+            poseContainer[4] = sharedPose->orientation->y;
+            poseContainer[5] = sharedPose->orientation->z;
+            poseContainer[6] = sharedPose->orientation->w;
+        }
+        else
+            throw wmex;
+    }
+    catch(exception &e){
+        cout << e.what() << '\n';
     }
 }
 
 void getLinearVelocities(double *linearVels){
-    boost::shared_ptr<geometry_msgs::Vector3 const> sharedVels;
-    sharedVels = ros::topic::waitForMessage<geometry_msgs::Vector3>("linvel_hub");
-    if(sharedVels != NULL){
-        linearVels[0] = sharedVels.x;
-        linearVels[1] = sharedVels.y;
-        linearVels[2] = sharedVels.z;
+    try {
+        oost::shared_ptr<geometry_msgs::Vector3 const> sharedVels;
+        sharedVels = ros::topic::waitForMessage<geometry_msgs::Vector3>("linvel_hub");
+        if(sharedVels != NULL){
+            linearVels[0] = sharedVels.x;
+            linearVels[1] = sharedVels.y;
+            linearVels[2] = sharedVels.z;
+        }
+        else
+            throw wmex;
+    }
+    catch(exception &e){
+        cout << e.what() << '\n';
+    }
+}
+
+char getActualMode(){
+    try {
+        boost::shared_ptr<std_msgs::String const> sharedMode;
+        sharedMode = ros::topic::waitForMessage<std_msgs::String>("mode_hub");
+        if(sharedMode != NULL){
+            stringstream ss(sharedMode->data);
+            string dat;
+            ss >> dat;
+            ss >> dat;
+            return (ss.str()).at(0);
+        }
+
+        throw wmex;
+    }
+    catch(exception &e){
+        cout << e.what() << '\n';
+    }
+    
+    return '\0';
+}
+
+char getActualState(){
+    try {
+        boost::shared_ptr<std_msgs::String const> sharedState;
+        sharedState = ros::topic::waitForMessage<std_msgs::String>("state_hub");
+        if(sharedState != NULL){
+            stringstream ss(sharedState->data);
+            string dat;
+            ss >> dat;
+            ss >> dat;
+            return (ss.str()).at(0);
+        }
+        
+        throw wmex;
+    }
+    catch(exception &e){
+        cout << e.what() << '\n';
     }
 }
 

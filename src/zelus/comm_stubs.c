@@ -67,3 +67,8 @@ get_linear_vels(){
 
     // send back to zelus
 }
+
+CAMLprim value
+get_actual_mode(){
+    char actual_mode = getActualMode();
+}

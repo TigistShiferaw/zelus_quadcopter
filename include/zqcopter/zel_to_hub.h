@@ -11,8 +11,17 @@
 #include <geometry_msgs/Pose.h>
 #include <iostream>
 #include <sstream>
+#include <exception>
 #include "zqcopter/hub.h"
 #include <boost/shared_ptr.hpp>
+
+// Exceptions
+class waitformessage : public exception {
+    virtual const char* what() const throw()
+    {
+        return "Failed while waiting for message from ros topic";
+    }
+} wmex;
 
 // ROS objects
 ros::NodeHandle nh;
@@ -28,7 +37,6 @@ ros::Publisher state_pub;
 
 // Ros subscribers
 ros::Subscriber pose_sub;
-
 
 // Initializes all publishers and subscribers
 // Returns 0 if succesful and -1 if error occurred
@@ -50,5 +58,7 @@ void publishAutonDesiredState(char state);
 
 void getPose(double *poseContainer);
 void getLinearVelocities(double *linearVels);
+char getActualMode();
+char getActualState();
 
 #endif
