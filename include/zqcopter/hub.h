@@ -7,33 +7,7 @@
 #include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/Quaternion.h>
 #include <sstream>
-
-// Structs to temporarily hold the information until they can
-// be converted to ROS messages
-struct Point {
-    double x;
-    double y;
-    double z;
-};
-
-struct Quat {
-    double x;
-    double y;
-    double z;
-    double w;
-};
-
-struct Pose {
-    Point p;
-    Quat q;
-};
-
-struct Twist {
-    int xdot;
-    int ydot;
-    int zdot;
-    // Ignore angular velocities for now
-};
+#include "zqcopter/transition_structs.h"
 
 class Hub {
     public:
@@ -60,11 +34,15 @@ class Hub {
         int cycle_rate = 10;
         int cycles;
 
-        // Subscribers and respective callbacks
+        // ---------------- Subscribers and Callbacks ----------------
+        // For rcp-side
         ros::Subscriber pose_sub;
+        ros::Subscriber
+
+        // For zelus-side
         ros::Subscriber vel_lim_sub;
         ros::Subscriber pos_bounds_sub;
-        ros::Subscriber state_sub;
+        ros::Subscriber desired_state_sub;
 
         void pose_callback(const geometry_msgs::Pose::ConstPtr &msg);
         void vel_lim_callback(const geometry_msgs::Vector3::ConstPtr &msg);
@@ -72,7 +50,8 @@ class Hub {
         void state_zel_callback(const std_msgs::String::ConstPtr &msg);
 
 
-        // Publishers
+        // ----------------- Publishers --------------------------
+
         ros::Publisher pose_pub;
         ros::Publisher xbounds_pub;
         ros::Publisher ybounds_pub;

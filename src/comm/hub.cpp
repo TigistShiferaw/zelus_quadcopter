@@ -19,7 +19,7 @@ int Hub::init(ros::NodeHandle *nodehandle){
     pose_sub = nh.subscribe("pose_rcp", 1, &Hub::pose_callback, this);
     vel_lim_sub = nh.subscribe("vel_limit_zel", &Hub::vel_lim_callback, this);
     pos_bounds_sub = nh.subscribe("pos_bounds_zel", &Hub::pos_bounds_callback, this);
-    state_zel_sub = nh.subscribe("state_zel", &Hub::state_zel_callback, this);
+    desired_state_sub = nh.subscribe("state_zel", &Hub::desired_state_callback, this);
 
     run();
 }
@@ -90,7 +90,7 @@ void Hub::publishAll(){
 
 }
 
-void Hub::state_zel_callback(const std_msgs::String::ConstPtr &msg){
+void Hub::desired_state_callback(const std_msgs::String::ConstPtr &msg){
     stringstream ss(msg->data);
     string code;
     ss >> code;
@@ -131,18 +131,18 @@ void Hub::pos_bounds_callback(const std_msgs::String::ConstPtr &msg){
 }
 
 void Hub::vel_lim_callback(const geometry_msgs::Vector3::ConstPtr &msg){
-    this->max_vels.x = msg->x;
-    this->max_vels.y = msg->y;
-    this->max_vels.z = msg->z;
+    max_vels.x = msg->data.x;
+    max_vels.y = msg->data.y;
+    max_vels.z = msg->data.z;
 }
 
 void Hub::pose_callback(const geometry_msgs::Pose::ConstPtr &msg){
     // Update pose
-    pose.position.x = msg->position.x;
-    pose.position.y = msg->position.y;
-    pose.position.z = msg->position.z;
-    pose.orientation.x = msg->orientation.x;
-    pose.orientation.y = msg->orientation.y;
-    pose.orientation.z = msg->orientation.z;
-    pose.orientation.w = msg->orientation.w;
+    pose.position.x = msg->pose.position.x;
+    pose.position.y = msg->pose.position.y;
+    pose.position.z = msg->pose.position.z;
+    pose.orientation.x = msg->pose.orientation.x;
+    pose.orientation.y = msg->pose.orientation.y;
+    pose.orientation.z = msg->pose.orientation.z;
+    pose.orientation.w = msg->pose.orientation.w;
 }

@@ -10,7 +10,9 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/Vector3.h>
 #include "zqcopter/hub.h"
+#include "zqcopter/transition_structs.h"
 
 #include <iostream>
 #include <sstream>
@@ -23,8 +25,8 @@ int cycle_rate;
 int cycles;
 
 // Ros publishers
-ros::Publisher apose_pub; // actual pose
-ros::Publisher twist_pub; // actual twist
+ros::Publisher pose_pub; // actual pose
+ros::Publisher lin_vel_pub;
 
 // Initializes all publishers and subscribers
 // Returns 0 if succesful and -1 if error occurred
@@ -34,8 +36,6 @@ int init(ros::NodeHandle *nodehandle);
 void run();
 
 void publishPose(Pose &pose);
-void publishTwist(Twist &twist);
-void publishAutonState(char state);
-// void publishXdot(int xdot);
-// void publishYdot(int ydot);
-// void publishZdot(int zdot);
+void publishLinearVels(Vec3 lin_vels);
+void publishState(char state);
+void publishMode(char mode);
